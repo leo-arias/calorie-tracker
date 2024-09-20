@@ -32,26 +32,20 @@ export default function Form({ dispatch, state }: FormProps) {
     const handleChange = (
         e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
     ) => {
+        const isNumberField = ["calories", "category"].includes(e.target.id);
+
         setActivity({
             ...activity,
-            [e.target.id]:
-                e.target.id === "calories"
-                    ? +e.target.value
-                    : e.target.id === "category"
-                    ? +e.target.value
-                    : e.target.value,
+            [e.target.id]: isNumberField ? +e.target.value : e.target.value,
         });
     };
 
     const isValidActivity = () => {
         const { name, calories } = activity;
-        const isNameValid = name.trim().length > 0;
-        const isCaloriesValid = calories > 0;
-
-        return isNameValid && isCaloriesValid;
+        return name.trim() !== "" && calories > 0;
     };
 
-    const handleSubmit = (e: FormEvent) => {
+    const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
         dispatch({
